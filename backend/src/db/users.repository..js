@@ -59,6 +59,26 @@ class UserRepository {
     return result.rows[0];
   }
 
+  // Find a user by ID including the password hash.
+  // Used only for password verification.
+  async findByIdWithPassword(id) {
+    const result = await pool.query(
+      `SELECT
+      id,
+      name,
+      email,
+      password_hash,
+      address,
+      role,
+      created_at
+     FROM users
+     WHERE id = $1`,
+      [id],
+    );
+
+    return result.rows[0];
+  }
+
   // Update user's password
   async updatePassword(id, passwordHash) {
     const result = await pool.query(

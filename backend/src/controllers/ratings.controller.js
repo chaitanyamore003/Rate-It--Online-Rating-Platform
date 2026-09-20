@@ -41,7 +41,36 @@ const updateRating = async (req, res) => {
   }
 };
 
+const deleteRating = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const storeId = req.params.storeId;
+
+    const deletedRating = await ratingRepository.deleteRating(userId, storeId);
+
+    if (!deletedRating) {
+      return res.status(404).json({
+        success: false,
+        message: "Rating not found",
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: "Rating removed successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting rating:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
 module.exports = {
   addRating,
   updateRating,
+  deleteRating,
 };

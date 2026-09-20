@@ -2,13 +2,10 @@ const UserRepository = require("../db/users.repository.");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-// ==================== REGISTER ====================
-
 const register = async (req, res) => {
   const { name, email, password, address, role } = req.body;
 
   try {
-    // Check whether the email is already registered
     const existing = await UserRepository.findByEmail(email);
 
     if (existing) {
@@ -18,15 +15,11 @@ const register = async (req, res) => {
       });
     }
 
-    // Hash the plain-text password before storing it
     const passwordHash = await bcrypt.hash(password, 10);
 
-    // Only allow USER or STORE_OWNER during registration.
-    // Admin should not be created through public registration.
-    // These values must match the uppercase role enum used throughout the app.
+    // Public registration is limited to USER and OWNER roles.
     const userRole = role === "OWNER" ? "OWNER" : "USER";
 
-    // Create the user in the database
     const newUser = await UserRepository.createUser({
       name,
       email,
@@ -50,13 +43,10 @@ const register = async (req, res) => {
   }
 };
 
-// ==================== LOGIN ====================
-
 const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Find the user using their email
     const user = await UserRepository.findByEmail(email);
 
     if (!user) {
@@ -66,8 +56,6 @@ const login = async (req, res) => {
       });
     }
 
-    // Compare the entered password with the hashed password
-    // stored in the password_hash database column
     const isPasswordValid = await bcrypt.compare(password, user.password_hash);
 
     if (!isPasswordValid) {
@@ -77,7 +65,6 @@ const login = async (req, res) => {
       });
     }
 
-    // Create JWT token after successful authentication
     const token = jwt.sign(
       {
         id: user.id,
@@ -112,11 +99,8 @@ const login = async (req, res) => {
   }
 };
 
-// ==================== GET CURRENT USER ====================
-
 const getMe = async (req, res) => {
   try {
-    // Use the same repository variable that was imported above
     const user = await UserRepository.findById(req.user.id);
 
     if (!user) {
@@ -140,14 +124,11 @@ const getMe = async (req, res) => {
   }
 };
 
-// ==================== UPDATE PASSWORD ====================
-
 const updatePassword = async (req, res) => {
-  const { oldPassword, newPassword } = req.body;
+  const { currentPassword, newPassword } = req.body;
 
   try {
-    // Get the currently authenticated user
-    const user = await UserRepository.findById(req.user.id);
+    const user = await UserRepository.findByIdWithPassword(req.user.id);
 
     if (!user) {
       return res.status(404).json({
@@ -156,23 +137,20 @@ const updatePassword = async (req, res) => {
       });
     }
 
-    // Compare old password with the stored password hash
     const isOldPasswordValid = await bcrypt.compare(
-      oldPassword,
+      currentPassword,
       user.password_hash,
     );
 
     if (!isOldPasswordValid) {
       return res.status(400).json({
         success: false,
-        message: "Old password is incorrect",
+        message: "Current password is incorrect",
       });
     }
 
-    // Hash the new password before saving it
     const newPasswordHash = await bcrypt.hash(newPassword, 10);
 
-    // Update password_hash in the database
     await UserRepository.updatePassword(user.id, newPasswordHash);
 
     return res.json({
@@ -189,7 +167,6 @@ const updatePassword = async (req, res) => {
   }
 };
 
-// Export controller functions
 module.exports = {
   register,
   login,

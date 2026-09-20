@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import api from "../../services/api";
 import { Store, Star, Loader2, Users } from "lucide-react";
 

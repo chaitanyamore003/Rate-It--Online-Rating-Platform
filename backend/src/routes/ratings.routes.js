@@ -18,6 +18,6 @@ ratingsRouter.put(
   updateRatingValidation,
   ratingsController.updateRating,
 );
-// ratingsRouter.delete("/:id", ratingsController.deleteRating);
+ratingsRouter.delete("/:storeId", ratingsController.deleteRating);
 
 module.exports = ratingsRouter;

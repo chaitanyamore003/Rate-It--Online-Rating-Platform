@@ -56,6 +56,20 @@ class RatingRepository {
     // so convert the result into a JavaScript number.
     return parseFloat(res.rows[0].average_rating);
   }
+
+  async deleteRating(userId, storeId) {
+    const res = await pool.query(
+      `
+    DELETE FROM ratings
+    WHERE user_id = $1
+      AND store_id = $2
+    RETURNING *
+    `,
+      [userId, storeId],
+    );
+
+    return res.rows[0];
+  }
 }
 
 // Export one instance of the repository.

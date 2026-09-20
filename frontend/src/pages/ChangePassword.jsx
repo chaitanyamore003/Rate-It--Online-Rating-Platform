@@ -64,7 +64,7 @@ const ChangePassword = () => {
     try {
       // Only send the two fields the API needs. Sending confirmPassword
       // would be dead weight — the server has no use for it.
-      const res = await api.put("/auth/password", {
+      const res = await api.put("/auth/update-password", {
         currentPassword: formData.currentPassword,
         newPassword: formData.newPassword,
       });
