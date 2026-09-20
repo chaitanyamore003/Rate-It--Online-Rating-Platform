@@ -73,6 +73,40 @@ Built with **React, Node.js, Express.js, PostgreSQL, and Supabase**.
 
 ---
 
+## 🔐 Demo Accounts
+
+You can use the following demo accounts to explore the different roles and features of **Rate It**.
+
+> **Note:** These credentials are for demonstration purposes only. Do not use them for real or sensitive data.
+
+| Role | Email | Password | Access |
+|------|-------|----------|--------|
+| 👑 Admin | `admin@example.com` | `Hello@123` | Admin Dashboard, Users & Stores |
+| 👤 User | `rahul@example.com` | `Hello@123` | Browse Stores & Manage Ratings |
+| 👤 User | `priya@example.com` | `Hello@123` | Browse Stores & Manage Ratings |
+| 🏪 Owner | `amit@example.com` | `Hello@123` | Store Dashboard & Ratings |
+| 🏪 Owner | `neha@example.com` | `Hello@123` | Store Dashboard & Ratings |
+| 🏪 Owner | `rohan@example.com` | `Hello@123` | Store Dashboard & Ratings |
+
+### Suggested Demo Flow
+
+**User**
+- Browse available stores
+- Search stores
+- View overall ratings
+- Submit, update, and remove ratings
+
+**Store Owner**
+- View owned store
+- View customer ratings
+- View store rating statistics
+
+**Admin**
+- View platform statistics
+- Manage users
+- Manage stores
+- Filter and search platform data
+
 ## ✨ Features
 
 ### 🔐 Authentication
