@@ -1,6 +1,15 @@
 
 <img width="1380" height="752" alt="full logo" src="https://github.com/user-attachments/assets/820c0fdd-e10b-448e-a1cb-34f38226c218" />
 
+<p align="center">
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react"/>
+  <img src="https://img.shields.io/badge/Vite-Frontend-646CFF?style=for-the-badge&logo=vite"/>
+  <img src="https://img.shields.io/badge/Node.js-Backend-339933?style=for-the-badge&logo=node.js"/>
+  <img src="https://img.shields.io/badge/Express.js-API-000000?style=for-the-badge&logo=express"/>
+  <img src="https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql"/>
+  <img src="https://img.shields.io/badge/Supabase-Hosting-3FCF8E?style=for-the-badge&logo=supabase"/>
+  <img src="https://img.shields.io/badge/JWT-Authentication-black?style=for-the-badge&logo=jsonwebtokens"/>
+</p>
 
 # Rate It — Online Rating Platform
 
