@@ -31,7 +31,7 @@ const DashboardLayout = () => {
     });
     navLinks.push({ to: "/admin/users", icon: Users, label: "Users" });
     navLinks.push({ to: "/admin/stores", icon: Store, label: "Stores" });
-  } else if (user?.role === "STORE_OWNER") {
+  } else if (user?.role === "OWNER") {
     navLinks.push({
       to: "/owner/dashboard",
       icon: LayoutDashboard,

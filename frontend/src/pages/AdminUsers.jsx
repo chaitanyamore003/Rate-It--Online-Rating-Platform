@@ -94,7 +94,7 @@ const AdminUsers = () => {
   // Role badge styles — three roles rendered as monochrome pills with
   // different weights so they're distinguishable without color:
   //   ADMIN       → solid black (highest contrast, highest privilege)
-  //   STORE_OWNER → outlined, dark text
+  //   OWNER → outlined, dark text
   //   USER → soft neutral fill (quietest, most common role)
   const roleBadge = (role) => {
     const base =
@@ -103,7 +103,7 @@ const AdminUsers = () => {
     if (role === "ADMIN") {
       return `${base} bg-neutral-900 text-white`;
     }
-    if (role === "STORE_OWNER") {
+    if (role === "OWNER") {
       return `${base} border border-neutral-300 text-neutral-900`;
     }
     return `${base} bg-neutral-100 text-neutral-600`;
@@ -206,7 +206,7 @@ const AdminUsers = () => {
             >
               <option value="">All roles</option>
               <option value="ADMIN">Admin</option>
-              <option value="STORE_OWNER">Store Owner</option>
+              <option value="OWNER">Store Owner</option>
               <option value="USER">user</option>
             </select>
           </div>

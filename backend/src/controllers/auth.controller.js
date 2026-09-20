@@ -21,9 +21,10 @@ const register = async (req, res) => {
     // Hash the plain-text password before storing it
     const passwordHash = await bcrypt.hash(password, 10);
 
-    // Only allow user or owner during registration
-    // Admin should not be created through public registration
-    const userRole = role === "owner" ? "owner" : "user";
+    // Only allow USER or STORE_OWNER during registration.
+    // Admin should not be created through public registration.
+    // These values must match the uppercase role enum used throughout the app.
+    const userRole = role === "OWNER" ? "OWNER" : "USER";
 
     // Create the user in the database
     const newUser = await UserRepository.createUser({

@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const authRouter = require("./routes/auth.routes");
+const storeRouter = require("./routes/store.routes");
+const ratingsRouter = require("./routes/ratings.routes");
 const dotenv = require("dotenv");
 // Load environment variables from .env file
 dotenv.config();
@@ -20,6 +22,8 @@ app.use(express.json());
 
 //adding routes to the application
 app.use("/api/auth", authRouter);
+app.use("/api/stores", storeRouter);
+app.use("/api/ratings", ratingsRouter);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

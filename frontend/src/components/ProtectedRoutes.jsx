@@ -14,16 +14,14 @@ const ProtectedRoute = ({ allowedRoles }) => {
     );
   }
 
-
   if (!user) {
     return <Navigate to="/auth/login" replace />;
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-
     if (user.role === "ADMIN")
       return <Navigate to="/admin/dashboard" replace />;
-    if (user.role === "STORE_OWNER")
+    if (user.role === "OWNER")
       return <Navigate to="/owner/dashboard" replace />;
     return <Navigate to="/stores" replace />;
   }

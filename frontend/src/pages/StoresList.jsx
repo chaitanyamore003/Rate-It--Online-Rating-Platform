@@ -45,6 +45,7 @@ const StoresList = () => {
   // Function responsible for requesting stores from the backend.
   const fetchStores = async () => {
     // Show the loading state before starting the API request.
+    console.log("Fetch stores called");
     setLoading(true);
 
     try {
@@ -102,6 +103,7 @@ const StoresList = () => {
   // useEffect runs after the component is mounted.
   useEffect(() => {
     // Fetch the stores when the page initially loads.
+    console.log("Fetching stores...");
     fetchStores();
 
     // Empty dependency array means:

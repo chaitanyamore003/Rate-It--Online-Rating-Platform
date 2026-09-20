@@ -163,7 +163,7 @@ const SignUp = () => {
               className={`${inputClass} cursor-pointer appearance-none pr-10`}
             >
               <option value="USER">Customer</option>
-              <option value="STORE_OWNER">Store Owner</option>
+              <option value="OWNER">Store Owner</option>
             </select>
             <ChevronDown
               size={16}

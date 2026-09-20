@@ -3,6 +3,7 @@ import StoresList from "../StoresList";
 const UserDashboard = () => {
   // This page is intentionally thin — it's the landing route for the USER role,
   // and its only job is to frame the StoresList with a page-level heading.
+  console.log("Rendering UserDashboard");
 
   return (
     <div>

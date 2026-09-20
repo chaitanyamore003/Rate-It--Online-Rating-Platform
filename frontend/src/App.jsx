@@ -65,9 +65,7 @@ const App = () => {
               </Route>
 
               {/* ─── Store owner routes ─── */}
-              <Route
-                element={<ProtectedRoute allowedRoles={["STORE_OWNER"]} />}
-              >
+              <Route element={<ProtectedRoute allowedRoles={["OWNER"]} />}>
                 <Route path="/owner/dashboard" element={<OwnerDashboard />} />
               </Route>
 

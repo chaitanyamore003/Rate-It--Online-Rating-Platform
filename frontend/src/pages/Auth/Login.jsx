@@ -23,7 +23,7 @@ const Login = () => {
         login(res.data.data.user, res.data.data.token);
 
         if (res.data.data.user.role === "ADMIN") navigate("/admin/dashboard");
-        else if (res.data.data.user.role === "STORE_OWNER")
+        else if (res.data.data.user.role === "OWNER")
           navigate("/owner/dashboard");
         else navigate("/stores");
       }
