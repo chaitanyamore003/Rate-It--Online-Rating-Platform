@@ -10,6 +10,9 @@ import ProtectedRoute from "./components/ProtectedRoutes";
 import Login from "./pages/Auth/Login";
 import SignUp from "./pages/Auth/SignUp";
 
+//error pages
+import NotFound from "./pages/error/NotFound404";
+
 // Dashboard pages — one per role, each role lands on its own home
 import AdminDashboard from "./pages/DashBoard/AdminDashboard";
 import OwnerDashboard from "./pages/DashBoard/OwnerDashBoard";
@@ -49,16 +52,7 @@ const App = () => {
                 <Route path="/admin/stores" element={<AdminStores />} />
               </Route>
 
-              {/* ─── user routes ───
-                  `/dashboard` renders the UserDashboard (which frames StoresList
-                  with a page-level greeting). `/stores` stays accessible on its
-                  own for direct links and future sub-pages that shouldn't
-                  inherit the dashboard header.
-
-                  Role value must match the backend's enum: `USER`, not
-                  `USER`. SignUp's select uses `USER`, and ProtectedRoute's
-                  fallback checks against it — using `USER` here would silently
-                  lock regular users out of their own routes. */}
+              {/* ─── user routes ─── */}
               <Route element={<ProtectedRoute allowedRoles={["USER"]} />}>
                 <Route path="/dashboard" element={<UserDashboard />} />
                 <Route path="/stores" element={<StoresList />} />
@@ -69,19 +63,13 @@ const App = () => {
                 <Route path="/owner/dashboard" element={<OwnerDashboard />} />
               </Route>
 
-              {/* ─── Root fallback ───
-                  Single entry point for "/". The redirect target is picked
-                  inside RootRedirect so we don't repeat the role mapping that
-                  ProtectedRoute already owns. */}
+              {/* ─── Root fallback ─── */}
               <Route path="/" element={<RootRedirect />} />
             </Route>
           </Route>
 
-          {/* ─────────────── Catch-all ───────────────
-              Unknown paths funnel to "/". For signed-in users that resolves
-              through RootRedirect to their dashboard; for guests the outer
-              ProtectedRoute bounces them to /auth/login. */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          {/* ─────────────── Catch-all ─────────────── */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

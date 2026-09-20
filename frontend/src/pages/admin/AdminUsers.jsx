@@ -9,34 +9,17 @@ import {
   Users,
 } from "lucide-react";
 
-/**
- * Admin user management table.
- *
- * Filtering vs. sorting behave differently on purpose:
- *   - Filters  → applied on submit (button or Enter). User types freely,
- *                no request per keystroke.
- *   - Sorting  → applied instantly on header click. A single tap should feel
- *                immediate, and column headers are cheap to re-click.
- *
- * Both cases funnel through the same `fetchUsers` helper, so there's one
- * place that knows how to build the query string.
- */
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Filter inputs — held separately from `users` so typing doesn't re-render
-  // the table until the user actually submits.
   const [filters, setFilters] = useState({ name: "", email: "", role: "" });
 
-  // Sort state — default is newest-first, matching the backend's natural order.
   const [sort, setSort] = useState({ field: "created_at", order: "desc" });
 
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      // URLSearchParams handles encoding — a name like "O'Brien" or "a&b"
-      // gets safely escaped without manual work.
       const queryParams = new URLSearchParams();
 
       // Only append non-empty filters, so the URL stays readable and the
@@ -52,8 +35,6 @@ const AdminUsers = () => {
       if (res.data.success) setUsers(res.data.data);
     } catch (err) {
       console.error(err);
-      // No toast — this is a passive admin view; an empty table plus the
-      // console log is enough signal without disrupting the page.
     } finally {
       setLoading(false);
     }
@@ -63,7 +44,6 @@ const AdminUsers = () => {
   // array — they're applied via the form's submit handler below, not on change.
   useEffect(() => {
     fetchUsers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort]);
 
   // Filters are applied on submit (button click or Enter key), not on change.
@@ -92,10 +72,6 @@ const AdminUsers = () => {
   const labelClass = "block text-sm font-medium text-neutral-900";
 
   // Role badge styles — three roles rendered as monochrome pills with
-  // different weights so they're distinguishable without color:
-  //   ADMIN       → solid black (highest contrast, highest privilege)
-  //   OWNER → outlined, dark text
-  //   USER → soft neutral fill (quietest, most common role)
   const roleBadge = (role) => {
     const base =
       "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium tracking-wide";
@@ -123,12 +99,6 @@ const AdminUsers = () => {
       >
         <div className="inline-flex items-center gap-1.5">
           {children}
-          {/* Three states:
-                - active asc  → up arrow
-                - active desc → down arrow
-                - inactive    → faint double arrow (hints "sortable")
-              The inactive icon sits at 40% opacity so it reads as a hint
-              rather than a prominent control. */}
           {isActive ? (
             sort.order === "asc" ? (
               <ArrowUp size={13} />
@@ -155,10 +125,7 @@ const AdminUsers = () => {
         </p>
       </div>
 
-      {/* ─────────────── Filters ───────────────
-          Card matches the surrounding language — hairline border, white
-          surface. `items-end` on the flex row aligns the submit button's
-          bottom edge with the inputs, which sit lower than their labels. */}
+      {/* ─────────────── Filters ───────────────*/}
       <div className="mb-5 rounded-xl border border-neutral-200 bg-white p-5">
         <form
           onSubmit={handleFilterSubmit}
@@ -211,8 +178,7 @@ const AdminUsers = () => {
             </select>
           </div>
 
-          {/* Submit button — same black treatment as auth forms, but width-fit
-              rather than full-width since it sits beside inputs, not beneath. */}
+          {/* Submit button */}
           <button
             type="submit"
             className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-black px-4 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
@@ -226,14 +192,10 @@ const AdminUsers = () => {
       {/* ─────────────── Users table ─────────────── */}
       <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
         {loading ? (
-          // Centered spinner inside the card — same neutral treatment used
-          // across every other loading state in the app.
           <div className="flex justify-center py-16">
             <Loader2 className="animate-spin text-neutral-400" size={28} />
           </div>
         ) : users.length === 0 ? (
-          // Empty state with icon + copy, matching the pattern used in
-          // StoresList and OwnerDashboard.
           <div className="px-6 py-16 text-center">
             <Users size={32} className="mx-auto mb-4 text-neutral-300" />
             <p className="text-sm font-medium text-neutral-900">
@@ -244,9 +206,6 @@ const AdminUsers = () => {
             </p>
           </div>
         ) : (
-          // Horizontal scroll wrapper — the table has 4 columns and a long
-          // address field, so on narrow screens we scroll the table rather
-          // than break the layout.
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">
               <thead>
@@ -277,10 +236,6 @@ const AdminUsers = () => {
                         {u.role.replace("_", " ")}
                       </span>
                     </td>
-                    {/* Address truncation: `td` elements ignore `max-w` when a
-                        sibling column needs space, so the truncation is applied
-                        to an inner div with an explicit max width. `title`
-                        surfaces the full value on hover. */}
                     <td className="px-5 py-3.5 text-neutral-500">
                       <div
                         className="max-w-[220px] truncate"

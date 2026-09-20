@@ -10,23 +10,11 @@ import {
   Star,
 } from "lucide-react";
 
-/**
- * Admin store management table.
- *
- * Deliberately mirrors AdminUsers in structure and behavior:
- *   - Filters  → applied on submit (button or Enter), not on keystroke
- *   - Sorting  → applied instantly on header click
- *   - One `fetchStores` helper builds the query string for both paths
- *
- * Keeping the two admin tables visually and behaviorally identical means
- * admins don't have to relearn the interaction when switching between them.
- */
+
 const AdminStores = () => {
   const [stores, setStores] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Filter inputs — held separately from `stores` so typing doesn't re-render
-  // the table until the user actually submits the form.
   const [filters, setFilters] = useState({ name: "", email: "", address: "" });
 
   // Sort state — default is newest-first, matching the backend's natural order.
@@ -35,12 +23,10 @@ const AdminStores = () => {
   const fetchStores = async () => {
     setLoading(true);
     try {
-      // URLSearchParams handles encoding for names/addresses with special
-      // characters — "Joe's Café" and "12 Main St & 3rd" both escape correctly.
+      
       const queryParams = new URLSearchParams();
 
       // Only append non-empty filters, so the URL stays clean and the backend
-      // can treat missing params as "no constraint."
       if (filters.name) queryParams.append("name", filters.name);
       if (filters.email) queryParams.append("email", filters.email);
       if (filters.address) queryParams.append("address", filters.address);
@@ -62,7 +48,6 @@ const AdminStores = () => {
   // they apply on form submit, not on every keystroke.
   useEffect(() => {
     fetchStores();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort]);
 
   const handleFilterSubmit = (e) => {
@@ -70,8 +55,6 @@ const AdminStores = () => {
     fetchStores();
   };
 
-  // Clicking the same column toggles direction; clicking a different column
-  // switches to it and starts at ascending.
   const handleSort = (field) => {
     if (sort.field === field) {
       setSort({ field, order: sort.order === "asc" ? "desc" : "asc" });
@@ -80,16 +63,11 @@ const AdminStores = () => {
     }
   };
 
-  // Shared input styling — identical to AdminUsers, Login, SignUp, and
-  // ChangePassword so the whole app reads as one form system.
   const inputClass =
     "block w-full rounded-lg border border-neutral-200 bg-white px-3.5 py-2.5 text-sm text-neutral-900 placeholder-neutral-400 outline-none transition focus:border-black focus:ring-1 focus:ring-black";
 
   const labelClass = "block text-sm font-medium text-neutral-900";
 
-  // Sortable header cell — reused for every column below. Same three-state
-  // icon logic as AdminUsers: up when active-asc, down when active-desc,
-  // faint double-arrow when inactive to hint "this is sortable."
   const SortHeader = ({ field, children, className = "" }) => {
     const isActive = sort.field === field;
 
@@ -128,9 +106,7 @@ const AdminStores = () => {
         </p>
       </div>
 
-      {/* ─────────────── Filters ───────────────
-          Same layout as AdminUsers: three inputs + a submit button that
-          bottom-aligns with the fields on md+ screens. */}
+      {/* ─────────────── Filters ─────────────── */}
       <div className="mb-5 rounded-xl border border-neutral-200 bg-white p-5">
         <form
           onSubmit={handleFilterSubmit}
@@ -182,8 +158,7 @@ const AdminStores = () => {
             />
           </div>
 
-          {/* Submit button — matches AdminUsers. `shrink-0` keeps it from
-              being squeezed by the flex-1 inputs beside it. */}
+          {/* Submit button */}
           <button
             type="submit"
             className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-black px-4 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
@@ -197,14 +172,10 @@ const AdminStores = () => {
       {/* ─────────────── Stores table ─────────────── */}
       <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
         {loading ? (
-          // Centered neutral spinner — same treatment as every other
-          // loading state in the app.
           <div className="flex justify-center py-16">
             <Loader2 className="animate-spin text-neutral-400" size={28} />
           </div>
         ) : stores.length === 0 ? (
-          // Empty state with icon + two-line copy, matching the pattern
-          // used in AdminUsers, StoresList, and OwnerDashboard.
           <div className="px-6 py-16 text-center">
             <Store size={32} className="mx-auto mb-4 text-neutral-300" />
             <p className="text-sm font-medium text-neutral-900">
@@ -215,9 +186,9 @@ const AdminStores = () => {
             </p>
           </div>
         ) : (
-          // Horizontal scroll wrapper — the table has four columns including
-          // an address, so narrow screens scroll the table rather than
-          // break the layout.
+          // Horizontal scroll wrapper — the table has 4 columns and a long
+          // address field, so on narrow screens we scroll the table rather
+          // than break the layout.
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">
               <thead>
@@ -225,8 +196,7 @@ const AdminStores = () => {
                   <SortHeader field="name">Name</SortHeader>
                   <SortHeader field="email">Email</SortHeader>
                   <SortHeader field="address">Address</SortHeader>
-                  {/* Rating column is sortable but right-aligned — numeric
-                      sorts read better with the values flush to one edge. */}
+
                   <SortHeader field="overall_rating" className="text-right">
                     Rating
                   </SortHeader>
@@ -242,10 +212,7 @@ const AdminStores = () => {
                       {s.name}
                     </td>
                     <td className="px-5 py-3.5 text-neutral-600">{s.email}</td>
-                    {/* Address truncation applied to an inner div rather than
-                        the <td> — table cells ignore max-width when the layout
-                        engine needs the space, so the truncation must live on
-                        a block element inside. `title` shows full text on hover. */}
+
                     <td className="px-5 py-3.5 text-neutral-500">
                       <div
                         className="max-w-[220px] truncate"
@@ -256,18 +223,11 @@ const AdminStores = () => {
                     </td>
                     <td className="px-5 py-3.5 text-right">
                       {s.overall_rating > 0 ? (
-                        // Rating pill — black chip with white text, matching
-                        // the overall-rating treatment on store cards in
-                        // StoresList and OwnerDashboard. `tabular-nums` keeps
-                        // the digits from shifting when values change.
                         <span className="inline-flex items-center gap-1 rounded-full bg-neutral-900 px-2.5 py-1 text-xs font-medium text-white tabular-nums">
                           {Number(s.overall_rating).toFixed(2)}
                           <Star size={10} className="fill-current" />
                         </span>
                       ) : (
-                        // Unrated stores get a quiet hairline chip rather than
-                        // a bold "No ratings yet" — the rating column should
-                        // still scan as a column of pills, not mixed formats.
                         <span className="inline-flex items-center rounded-full border border-neutral-200 px-2.5 py-1 text-[11px] text-neutral-400">
                           No ratings
                         </span>

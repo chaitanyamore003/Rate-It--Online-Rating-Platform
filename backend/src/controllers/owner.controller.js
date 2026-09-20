@@ -44,7 +44,65 @@ const getRatings = async (req, res) => {
   }
 };
 
+const createOwnerStore = async (req, res) => {
+  const { name, email, address } = req.body;
+
+  try {
+    const ownerId = req.user.id;
+
+    // Check whether this owner already has a store.
+    const existingStore = await storeRepository.findByOwnerId(ownerId);
+
+    if (existingStore) {
+      return res.status(400).json({
+        success: false,
+        message: "You already have a store",
+      });
+    }
+
+    const store = await storeRepository.create({
+      name,
+      email,
+      address,
+      ownerId,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Store created successfully",
+      data: store,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+const getMyStore = async (req, res) => {
+  try {
+    const store = await storeRepository.findByOwnerId(req.user.id);
+
+    res.json({
+      success: true,
+      data: store || null,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
 module.exports = {
   getDashboardStats,
   getRatings,
+  createOwnerStore,
+  getMyStore,
 };

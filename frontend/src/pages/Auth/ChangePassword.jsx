@@ -4,11 +4,6 @@ import { KeyRound, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 
 /**
  * Change-password form.
- *
- * Self-contained: no route params, no context reads — the current user is
- * identified by the auth token attached to the API request. So this page
- * works identically for every role (admin, owner, user).
- *
  * Two-stage validation:
  *   1. Client-side — catches mismatched confirms and weak passwords before
  *      hitting the network. Same regex used in SignUp so the rules stay aligned.
@@ -22,8 +17,7 @@ const ChangePassword = () => {
     confirmPassword: "",
   });
 
-  // `status` holds both the type and message. Type drives which icon and
-  // colors render — 'error', 'success', or '' (nothing shown).
+  
   const [status, setStatus] = useState({ type: "", message: "" });
   const [loading, setLoading] = useState(false);
 
@@ -33,13 +27,9 @@ const ChangePassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Clear previous status so a stale success message doesn't linger while
-    // the next attempt is in flight.
     setStatus({ type: "", message: "" });
 
     // ─── Client-side validation ───
-    // Confirm field first — it's the cheapest check, and users who fat-finger
-    // the confirm benefit from the fast feedback.
     if (formData.newPassword !== formData.confirmPassword) {
       return setStatus({
         type: "error",
@@ -49,7 +39,6 @@ const ChangePassword = () => {
 
     // Same password policy as SignUp. Kept inline rather than extracted
     // because it's a two-line check — if you add a third place, pull it into
-    // utils/validators.js.
     const passRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,16}$/;
     if (!passRegex.test(formData.newPassword)) {
       return setStatus({
@@ -84,8 +73,7 @@ const ChangePassword = () => {
         });
       }
     } catch (err) {
-      // Server errors here are typically "current password is incorrect" —
-      // pass through the API's message when it exists.
+
       setStatus({
         type: "error",
         message: err.response?.data?.message || "Failed to update password",
@@ -95,16 +83,13 @@ const ChangePassword = () => {
     }
   };
 
-  // Shared input styling — same tokens used on Login and SignUp so the
-  // three forms feel like one system.
+
   const inputClass =
     "block w-full rounded-lg border border-neutral-200 bg-white px-3.5 py-2.5 text-sm text-neutral-900 placeholder-neutral-400 outline-none transition focus:border-black focus:ring-1 focus:ring-black disabled:opacity-50";
 
   const labelClass = "block text-sm font-medium text-neutral-900";
 
   return (
-    // `max-w-md mx-auto` keeps the form at reading width on wide screens.
-    // Card styling matches the auth pages — hairline border, rounded corners.
     <div className="mx-auto max-w-md">
       <div className="rounded-xl border border-neutral-200 bg-white p-6 sm:p-8">
         {/* ─────────────── Header ─────────────── */}
@@ -115,12 +100,7 @@ const ChangePassword = () => {
           </h2>
         </div>
 
-        {/* ─────────────── Status banner ───────────────
-            Monochrome treatment:
-              - error   → black surface, white text (inverted, high contrast)
-              - success → white surface, hairline border, neutral text
-            Same visual pattern as the toast in StoresList so "notification"
-            reads consistently across the app. */}
+        {/* ─────────────── Status banner ─────────────── */}
         {status.message && (
           <div
             role="status"
@@ -130,8 +110,7 @@ const ChangePassword = () => {
                 : "border-neutral-200 bg-neutral-50 text-neutral-900"
             }`}
           >
-            {/* Icon only shown on success — errors use the inverted background
-                alone to signal "something's wrong," no icon needed. */}
+            {/* Status icon */}
             {status.type === "success" && (
               <CheckCircle2 size={16} className="mt-0.5 shrink-0" />
             )}
@@ -175,9 +154,7 @@ const ChangePassword = () => {
               disabled={loading}
               className={inputClass}
             />
-            {/* Hint moved below the field as quiet caption text — same pattern
-                as the SignUp password field, so both forms teach the rule the
-                same way. */}
+        
             <p className="mt-1.5 text-xs text-neutral-400">
               8–16 characters, 1 uppercase, 1 special character.
             </p>
@@ -200,10 +177,7 @@ const ChangePassword = () => {
             />
           </div>
 
-          {/* ─── Submit ───
-              Same black button treatment used on Login and SignUp. Loading
-              swaps the label to "Updating…" so the button communicates what's
-              happening instead of just spinning silently. */}
+          {/* ─── Submit ─── */}
           <button
             type="submit"
             disabled={loading}

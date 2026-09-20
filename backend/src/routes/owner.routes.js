@@ -11,5 +11,7 @@ ownerRouter.use(authenticateUser, authorizeRoles("OWNER"));
 
 ownerRouter.get("/dashboard", ownerController.getDashboardStats);
 ownerRouter.get("/ratings", ownerController.getRatings);
+ownerRouter.get("/my-store", ownerController.getMyStore);
+ownerRouter.post("/my-store", ownerController.createOwnerStore);
 
 module.exports = ownerRouter;

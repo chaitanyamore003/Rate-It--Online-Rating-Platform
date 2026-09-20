@@ -37,7 +37,7 @@ const SignUp = () => {
     setLoading(true);
 
     try {
-      const res = await api.post("/auth/register", formData);
+      const res = await api.post("/auth/signUp", formData);
       if (res.data.success) {
         navigate("/auth/login", {
           state: { message: "Registration successful! Please login." },
