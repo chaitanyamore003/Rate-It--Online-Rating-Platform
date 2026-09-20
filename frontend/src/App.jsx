@@ -16,10 +16,10 @@ import OwnerDashboard from "./pages/DashBoard/OwnerDashBoard";
 import UserDashboard from "./pages/DashBoard/UserDashBoard";
 
 // Feature pages
-import AdminUsers from "./pages/AdminUsers";
-import AdminStores from "./pages/AdminStores";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminStores from "./pages/admin/AdminStores";
 import StoresList from "./pages/StoresList";
-import ChangePassword from "./pages/ChangePassword";
+import ChangePassword from "./pages/Auth/ChangePassword";
 
 const RootRedirect = () => {
   return <Navigate to="/dashboard" replace />;

@@ -5,6 +5,7 @@ const authRouter = require("./routes/auth.routes");
 const storeRouter = require("./routes/store.routes");
 const ratingsRouter = require("./routes/ratings.routes");
 const ownerRouter = require("./routes/owner.routes");
+const adminRouter = require("./routes/admin.routes");
 const dotenv = require("dotenv");
 // Load environment variables from .env file
 dotenv.config();
@@ -26,6 +27,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/stores", storeRouter);
 app.use("/api/ratings", ratingsRouter);
 app.use("/api/owner", ownerRouter);
+app.use("/api/admin", adminRouter);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
