@@ -126,8 +126,8 @@ The application supports three roles:
 
 | Role | Capabilities |
 |---|---|
-| `NORMAL_USER` | Browse stores and manage personal ratings |
-| `STORE_OWNER` | Create and manage a store, view customer ratings |
+| `USER` | Browse stores and manage personal ratings |
+| `OWNER` | Create and manage a store, view customer ratings |
 | `ADMIN` | Manage users, stores, and platform statistics |
 
 Authorization is enforced on the backend using authentication and role-based middleware.
@@ -471,8 +471,8 @@ updated_at
 Roles:
 
 ```text
-NORMAL_USER
-STORE_OWNER
+USER
+OWNER
 ADMIN
 ```
 
@@ -665,7 +665,7 @@ All administrative APIs are protected by the `ADMIN` role.
 ### 1. Clone the repository
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/chaitanyamore003/Rate-It--Online-Rating-Platform
 cd "Rate It - Online Rating Platform"
 ```
 
